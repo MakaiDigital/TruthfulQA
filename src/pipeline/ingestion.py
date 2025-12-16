@@ -10,7 +10,7 @@ class DataIngestion:
 
     def load_dataset(self) -> pd.DataFrame:
         """Load TruthfulQA dataset"""
-        # Check specific paths in order
+
         paths_to_check = [
             self.data_dir / "v0" / "TruthfulQA.csv",
             self.data_dir / "v1" / "TruthfulQA.csv",
@@ -25,7 +25,6 @@ class DataIngestion:
                 logging.info(f"Columns: {list(df.columns)}")
                 return df
 
-        # Fallback: search recursively
         for file_path in self.data_dir.rglob("TruthfulQA.csv"):
             logging.info(f"Found dataset at: {file_path}")
             df = pd.read_csv(file_path)
