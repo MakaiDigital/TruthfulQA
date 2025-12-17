@@ -28,26 +28,14 @@ This implementation features a  RAG system with:
 ### 5. **Multi-Layer Caching**
 - **Cache Types**: Redis (distributed), Disk (persistent), Memory (fast)
 - **Cache Layers**: 
-  - Retrieval results (1 hour TTL)
-  - Generated answers (1 hour TTL)
+  - Retrieval results
+  - Generated answers 
   - Embeddings (permanent)
 - **Benefit**: 80-90% latency reduction on repeated queries
 
-## Performance Metrics
 
-### Retrieval Quality
-| Metric | Baseline | With Hybrid | + Reranking | + Expansion |
-|--------|----------|-------------|-------------|-------------|
-| Recall@3 | 0.65 | 0.78 | 0.82 | 0.87 |
-| Precision@3 | 0.72 | 0.81 | 0.89 | 0.89 |
-| MRR | 0.68 | 0.76 | 0.84 | 0.86 |
 
-### Latency (per query)
-- Cold start: ~2.5s
-- With cache (hit): ~50ms
-- Hybrid retrieval: +200ms
-- Reranking: +150ms
-- Query expansion: +300ms (LLM) / +50ms (WordNet)
+
 
 ## Usage Examples
 
@@ -181,11 +169,7 @@ Return top 3
 
 ## Results Interpretation
 
-Expected similarity scores with all features enabled:
-- **> 0.80**: Excellent alignment
-- **0.70-0.80**: Good alignment  
-- **0.60-0.70**: Moderate alignment
-- **< 0.60**: Needs improvement
+
 
 Typical improvements:
 - Query expansion: +5-10% avg similarity

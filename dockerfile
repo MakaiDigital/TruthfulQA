@@ -16,10 +16,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Download NLTK data
 RUN python -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4')"
 
-# Copy application code
+
 COPY . .
 
-# Create necessary directories
 RUN mkdir -p data vector_db results models cache
 
 # Download and cache models
