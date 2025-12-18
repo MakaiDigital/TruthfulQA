@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: rag-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  rag-pipeline:
+    build: .
+    container_name: advanced-truthful-rag
+    depends_on:
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+      - ./vector_db:/app/vector_db
+      - ./results:/app/results
+      - ./cache:/app/cache
+    environment:
+      - LLM_PROVIDER=${LLM_PROVIDER:-mock}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - CACHE_TYPE=${CACHE_TYPE:-redis}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ENABLE_QUERY_EXPANSION=${ENABLE_QUERY_EXPANSION:-true}
+      - ENABLE_RERANKING=${ENABLE_RERANKING:-true}
+    command: python main.py
+
+volumes:
+  redis_data:
